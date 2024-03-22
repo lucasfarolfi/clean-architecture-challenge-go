@@ -52,12 +52,17 @@ func main() {
 	eventDispatcher.Register("OrderCreated", &handler.OrderCreatedHandler{
 		RabbitMQChannel: rabbitMQChannel,
 	})
+	eventDispatcher.Register("ListOrders", &handler.ListOrdersHandler{
+		RabbitMQChannel: rabbitMQChannel,
+	})
 
 	createOrderUseCase := NewCreateOrderUseCase(db, eventDispatcher)
+	//listOrdersUseCase := NewListOrdersUseCase(db, eventDispatcher)
 
 	webserver := webserver.NewWebServer(configs.WebServerPort)
 	webOrderHandler := NewWebOrderHandler(db, eventDispatcher)
 	webserver.AddHandler("/order", webOrderHandler.Create)
+	webserver.AddHandler("/orders", webOrderHandler.ListOrders)
 	fmt.Println("Starting web server on port", configs.WebServerPort)
 	go webserver.Start()
 

@@ -1,0 +1,3 @@
+### LIST ORDERS
+GET http://localhost:8000/orders HTTP/1.1
+Host: localhost:8000
